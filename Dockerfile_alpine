@@ -1,0 +1,16 @@
+# This image doesn't work.
+
+FROM golang:1.9.1-alpine AS build
+
+COPY . $GOPATH/src/github.com/takecy/tz
+WORKDIR $GOPATH/src/github.com/takecy/tz
+
+RUN go build -o tz .\
+ && mv tz /usr/local/bin/
+
+
+FROM alpine:3.6
+
+COPY --from=build /usr/local/bin/tz /usr/local/bin/
+
+CMD ["tz"]
